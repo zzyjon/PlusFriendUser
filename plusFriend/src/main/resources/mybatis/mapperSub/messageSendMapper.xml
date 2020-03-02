@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zlgoon.plusFriend.mapperSub.MessageSendMapper" >
+
+	<!-- 고객에게 문의 접수 완료 알림 문자를 발송  -->
+	<insert id="setMessageSendInfo" parameterType="com.zlgoon.plusFriend.vo.MessageVO">
+		INSERT INTO sc_tran (
+			TR_SENDDATE, TR_SENDSTAT, TR_MSGTYPE, TR_PHONE, TR_CALLBACK, TR_MSG
+		) VALUES (
+			now(), '0', '0', #{trPhone}, #{trCallback}, #{trMsg}
+		);
+	</insert>
+	
+	<!-- 해당 문의종류에 등록된 관리자에게 접수 안내 문자를 발송 List  -->
+   	<insert id="setMessageSendInfoAdminList" parameterType="com.zlgoon.plusFriend.vo.MessageVO">
+	INSERT INTO sc_tran (
+		TR_SENDDATE, TR_SENDSTAT, TR_MSGTYPE, TR_PHONE, TR_CALLBACK, TR_MSG
+	) VALUES
+		<foreach collection="list" item="item" separator=" , ">
+			(
+			now(), '0', '0', #{item.trPhone}, #{item.trCallback}, #{item.trMsg}
+			)
+		</foreach>
+	</insert>
+	
+	<!-- 해당 문의종류에 등록된 관리자에게 접수 안내 문자를 발송  -->
+   	<insert id="setMessageSendInfoAdmin" parameterType="com.zlgoon.plusFriend.vo.MessageVO">
+	INSERT INTO sc_tran (
+		TR_SENDDATE, TR_SENDSTAT, TR_MSGTYPE, TR_PHONE, TR_CALLBACK, TR_MSG
+	) VALUES (
+		now(), '0', '0', #{trPhone}, #{trCallback}, #{trMsg}
+	)
+	</insert>
+    
+</mapper>

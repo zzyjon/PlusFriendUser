@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zlgoon.plusFriend.mapper.LogMapper" >
+	
+	<!-- 문자 발송 로그를 남김  -->
+	<insert id="insertMessageSendLog" parameterType="com.zlgoon.plusFriend.vo.AskVO">
+		INSERT INTO tb_message_send_log (
+			AB_SEQ, PHONE_NO, REG_DATE, PROCESS_STATUS
+		) VALUES (
+			#{abSeq}, #{replyPhoneNo}, NOW(), '00'
+		);
+	</insert>
+    
+    <!-- 문의 접수 시 최초 요청 로그를 남김  -->
+    <insert id="insertProcessStatusLog" parameterType="com.zlgoon.plusFriend.vo.AskVO">
+    	INSERT INTO tb_process_status_log (
+    		AB_SEQ, REG_DATE, PROCESS_STATUS
+    	) VALUES (
+    		#{abSeq}, NOW(), '00'
+    	);
+    </insert>
+    
+</mapper>

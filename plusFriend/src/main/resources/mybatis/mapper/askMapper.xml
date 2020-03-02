@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zlgoon.plusFriend.mapper.AskMapper" >
+
+    <!-- 문의 등록 - 마스터테이블  -->
+    <insert id="insertAskBoard" parameterType="com.zlgoon.plusFriend.vo.AskVO" useGeneratedKeys="true" keyProperty="abSeq" keyColumn="AB_SEQ">
+	    INSERT INTO tb_ask_board (
+				RCOMPANY_NAME, BRANCH_NAME, OWNER_NAME, CORP_NO, REPLY_PHONE_NO, REPLY_EMAIL, CUSTOM_TYPE, USER_MEMO_YN, USER_MEMO, REG_DATE
+		) 
+		VALUES ( 
+				#{rcompanyName}, #{branchName}, #{ownerName}, #{corpNo}, #{replyPhoneNo}, #{replyEmail}, #{customType}, #{userMemoYn}, #{userMemo}, NOW()
+		)
+    </insert>
+    
+    <!-- 정산문의 등록 - 슬레이브테이블 -->
+    <insert id="insertCalculateBoard" parameterType="com.zlgoon.plusFriend.vo.AskVO" >
+		 INSERT INTO tb_ask_board_calculate ( 
+		 		AB_SEQ, TAX_YN, DEPOSIT_YN, CALCULATE_YN, COMMISSION_YN, SALES_DATA_YN, TAX_YN_START_DATE, TAX_YN_END_DATE, CALCULATE_YN_START_DATE, CALCULATE_YN_END_DATE, SALES_DATA_YN_START_DATE, SALES_DATA_YN_END_DATE 
+		 ) 
+		 VALUES ( 
+		 		#{abSeq}, #{taxYn}, #{depositYn}, #{calculateYn}, #{commissionYn}, #{salesDataYn}, #{taxYnStartDate},  #{taxYnEndDate}, #{calculateYnStartDate}, #{calculateYnEndDate},  #{salesDataYnStartDate}, #{salesDataYnEndDate}
+		 )
+    </insert>
+    
+    <!-- 쿠폰문의 등록 - 슬레이브테이블 -->
+    <insert id="insertCouponBoard" parameterType="com.zlgoon.plusFriend.vo.AskVO" >
+    	INSERT INTO tb_ask_board_coupon (
+    			AB_SEQ, COUPON_NUM, COUPON_USE_YN, COUPON_ALLOW_YN, COUPON_CHECK_YN, POS_ERR_YN, POS_SALES_YN, FAIL_PAYMENT_YN
+    	) 
+    	VALUES (
+    			#{abSeq}, #{couponNum}, #{couponUseYn}, #{couponAllowYn}, #{couponCheckYn}, #{posErrYn}, #{posSalesYn}, #{failPaymentYn}
+    	)
+    </insert>
+    
+     <!-- 쿠폰인증 사이트문의 등록 - 슬레이브테이블 -->
+    <insert id="insertSiteBoard" parameterType="com.zlgoon.plusFriend.vo.AskVO" >
+    	INSERT INTO tb_ask_board_site (
+    			AB_SEQ, FIND_IDPWD_YN, MANUAL_YN
+    	) 
+    	VALUES (
+    			#{abSeq}, #{findIdpwdYn}, #{manualYn}
+    	);
+    </insert>
+    
+    
+    <!-- 정산 문의접수 문자 알림을 발송할 관리자 번호 조회  -->
+	<select id="getCalculateAdminPhoneNumber" parameterType="com.zlgoon.plusFriend.vo.AskVO" resultType="com.zlgoon.plusFriend.vo.MessageVO">
+		SELECT 
+			A.PHONE_NO AS trPhone
+		FROM 
+			tb_message_send_info AS MSI 
+		INNER 
+			JOIN tb_admin AS A 
+		ON 
+			MSI.ADMIN_SEQ = A.ADMIN_SEQ 
+		WHERE 
+			CALCULATE_USE_YN = 'Y';
+	</select>
+	
+	    <!-- 쿠폰 문의접수 문자 알림을 발송할 관리자 번호 조회  -->
+	<select id="getCouponAdminPhoneNumber" parameterType="com.zlgoon.plusFriend.vo.AskVO" resultType="com.zlgoon.plusFriend.vo.MessageVO">
+		SELECT 
+			A.PHONE_NO AS trPhone
+		FROM 
+			tb_message_send_info AS MSI 
+		INNER 
+			JOIN tb_admin AS A 
+		ON 
+			MSI.ADMIN_SEQ = A.ADMIN_SEQ 
+		WHERE 
+			COUPON_USE_YN = 'Y';
+	</select>
+    
+    
+        <!-- 쿠폰인증사이트 문의접수 문자 알림을 발송할 관리자 번호 조회  -->
+	<select id="getSiteAdminPhoneNumber" parameterType="com.zlgoon.plusFriend.vo.AskVO" resultType="com.zlgoon.plusFriend.vo.MessageVO">
+		SELECT 
+			A.PHONE_NO AS trPhone
+		FROM 
+			tb_message_send_info AS MSI 
+		INNER 
+			JOIN tb_admin AS A 
+		ON 
+			MSI.ADMIN_SEQ = A.ADMIN_SEQ 
+		WHERE 
+			SITE_USE_YN = 'Y';
+	</select>
+    
+    
+    
+    
+</mapper>

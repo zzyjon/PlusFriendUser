@@ -1,0 +1,73 @@
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*Mapper.xml
+
+spring: 
+  profiles.active: dev
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+ 
+--- #로컬
+spring:
+  profiles: local
+  datasource:
+    hikari:
+      main:
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/plusfriend?characterEncoding=utf8&useUnicode=true&mysqlEncoding=utf8&verifyServerCertificate=false&useSSL=false&serverTimezone=UTC
+        username: 0000
+        password: 0000
+      sub:
+        jdbc-url: jdbc:mysql://0.0.0.0:3306/message?serverTimezone=UTC
+        username: 0000
+        password: 0000
+logging:
+  config: classpath:logback-spring.xml
+  file: C:/logs/plusFriend.log
+  pattern:
+    file: C:/logs/plusFriend.%d{yyyy-MM-dd}.log
+
+---  #개발
+spring:
+  profiles: dev
+  datasource:
+    hikari:
+      main:
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://0.0.0.0:3306/plusfriend?verifyServerCertificate=false&useSSL=false&serverTimezone=UTC
+        username: 0000
+        password: 0000
+      sub:
+        jdbc-url: jdbc:mysql://0.0.0.0:3306/message?serverTimezone=UTC
+        username: 0000
+        password: 0000
+logging:
+  config: classpath:logback-spring.xml
+  file: /home/service/plusfriend/plusfriend-user/applogs/plusFriend.log
+  pattern:
+    file: /home/service/plusfriend/plusfriend-user/applogs/plusFriend.%d{yyyy-MM-dd}.log
+    
+--- #운영
+spring:
+  profiles: operation
+  datasource:
+    hikari:
+      main:
+        jdbc-url: jdbc:mysql://0.0.0.0:3306/plusfriend?verifyServerCertificate=false&useSSL=false&serverTimezone=UTC
+        username: 0000
+        password: 0000
+      sub:
+        jdbc-url: jdbc:mysql://0.0.0.0:3306/message?serverTimezone=UTC
+        username: 0000
+        password: 0000
+logging:
+  config: classpath:logback-spring.xml
+  file: /home/service/plusfriend/plusfriend-user/applogs/plusFriend.log
+  pattern:
+    file: /home/service/plusfriend/plusfriend-user/applogs/plusFriend.%d{yyyy-MM-dd}.log    
+    
+    
+
+    
+
+  
